@@ -2,6 +2,7 @@ import { v4 as uuid } from 'uuid';
 
 import IAddressRepository from '../IAddressRepository';
 import ICreateAddressDTO from '@modules/address/dtos/ICreateAddressDTO';
+import IListAddressDTO from '@modules/address/dtos/IListAddressDTO';
 
 import Address from '../../infra/typeorm/entities/Address';
 
@@ -14,8 +15,8 @@ class FakeAddresssRepository implements IAddressRepository {
     return findAddress;
   }
 
-  public async find(user_id: string): Promise<Address[] | undefined> {
-    const findAddress = this.addresses.filter(address => address.user_id === user_id);
+  public async find(addressData: IListAddressDTO): Promise<Address[] | undefined> {
+    const findAddress = this.addresses.filter(address => address.user_id === addressData.user_id);
 
     return findAddress;
   }

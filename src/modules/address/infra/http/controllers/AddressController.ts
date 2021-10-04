@@ -47,10 +47,16 @@ export default class AddressController {
   public async list(request: Request, response: Response): Promise<Response> {
     const user_id = request.user.id;
 
+    const { city, state, country, postal_code } = request.query;
+
     const listAddress = container.resolve(ListAddressService);
 
     const address: Address[] = await listAddress.execute({
-      user_id
+      user_id,
+      city: String(city),
+      state: String(state),
+      country: String(country),
+      postal_code: String(postal_code),
     });
 
     return response.json(classToClass(address));

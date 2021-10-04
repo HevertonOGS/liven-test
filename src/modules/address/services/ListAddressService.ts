@@ -22,8 +22,18 @@ class ShowAddressService {
 
   public async execute({
     user_id,
+    city,
+    state,
+    country,
+    postal_code,
   }: IRequest): Promise<Address[]> {
-    const addresses = await this.addressRepository.find(user_id);
+    const addresses = await this.addressRepository.find({
+      user_id,
+      country,
+      city,
+      state,
+      postal_code
+    });
 
     if(!addresses || addresses.length === 0)
       throw new AppError('No address found.');

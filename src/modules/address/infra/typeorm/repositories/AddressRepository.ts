@@ -2,6 +2,7 @@ import { getRepository, Repository, Not } from 'typeorm';
 
 import IAddressRepository from '@modules/address/repositories/IAddressRepository';
 import ICreateAddressDTO from '@modules/address/dtos/ICreateAddressDTO';
+import IListAddressDTO from '@modules/address/dtos/IListAddressDTO';
 
 import Address from '../entities/Address';
 
@@ -18,11 +19,18 @@ class AddressRepository implements IAddressRepository {
     return address;
   }
 
-  public async find(user_id: string, city?: string, state?: string, country?: string, postal_code?: string): Promise<Address[] | undefined> {
+  public async find(dataAddress: IListAddressDTO): Promise<Address[] | undefined> {
+    let querySearchAddress = {
+      user_id: dataAddress.user_id
+    };
+
+    if(dataAddress.city !== 'undefined') Object.assign(querySearchAddress, { city: dataAddress.city });
+    if(dataAddress.state !== 'undefined') Object.assign(querySearchAddress, { state: dataAddress.state });
+    if(dataAddress.country !== 'undefined') Object.assign(querySearchAddress, { country: dataAddress.country });
+    if(dataAddress.postal_code !== 'undefined') Object.assign(querySearchAddress, { postal_code: dataAddress.postal_code });
+
     const addresses = await this.ormRepository.find({
-      where: {
-        user_id: user_id,
-      }
+      where: querySearchAddress
     });
 
     return addresses;
